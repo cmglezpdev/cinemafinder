@@ -1,3 +1,3 @@
-# cinemapedia
+# filmfinder
 
 A new Flutter project.
