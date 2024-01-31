@@ -1,6 +1,6 @@
 {
-    "name": "filmfinder",
-    "short_name": "filmfinder",
+    "name": "cinemafinder",
+    "short_name": "cinemafinder",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

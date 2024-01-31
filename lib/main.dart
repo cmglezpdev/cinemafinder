@@ -1,5 +1,5 @@
-import 'package:filmfinder/config/router/app_router.dart';
-import 'package:filmfinder/config/theme/app_theme.dart';
+import 'package:cinemafinder/config/router/app_router.dart';
+import 'package:cinemafinder/config/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 void main() {

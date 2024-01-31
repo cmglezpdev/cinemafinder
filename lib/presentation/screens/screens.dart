@@ -1,3 +1,3 @@
 
 
-export 'package:filmfinder/presentation/screens/movies/home_screen.dart';
+export 'package:cinemafinder/presentation/screens/movies/home_screen.dart';
