@@ -1,6 +1,3 @@
-
-
-
 import 'package:cinemafinder/config/constants/environment.dart';
 import 'package:cinemafinder/domain/datasources/movies_datasource.dart';
 import 'package:cinemafinder/domain/entities/movie.dart';
@@ -75,5 +72,17 @@ class MoviesDbDatasource extends MoviesDatasource {
 
     final movieDb = MovieDbDetails.fromJson(response.data);
     return MovieMapper.fromMovieDBDetails(movieDb);
+  }
+  
+  @override
+  Future<List<Movie>> searchMovies(String query, {int page = 1}) async {
+    if(query.trim().isEmpty) [];
+    
+    final response = await dio.get('/search/movie', queryParameters: {
+      'page': page,
+      'query': query
+    });
+
+    return _jsonToMovies(response.data);
   }
 }
