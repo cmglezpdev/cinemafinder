@@ -1,5 +1,6 @@
 import 'package:cinemafinder/presentation/providers/movies/movies_providers.dart';
 import 'package:cinemafinder/presentation/providers/providers.dart';
+import 'package:cinemafinder/presentation/widgets/shared/full_screen_loader.dart';
 import 'package:cinemafinder/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -42,15 +43,14 @@ class _HomeViewState extends ConsumerState<_HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    final initialLogin = ref.watch(initialLoadingProvider);
+    if(initialLogin) return const FullScreenLoader();
+
     final moviesSlideshow = ref.watch(moviesSlideshowProvider);
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
     final popularMovies = ref.watch(popularMoviesProvider);
     final upcomingMovies = ref.watch(upcomingMoviesProvider);
     final topRatedMovies = ref.watch(topRatedMoviesProvider);
-
-    if (moviesSlideshow.isEmpty) {
-      return const CircularProgressIndicator();
-    }
 
     return CustomScrollView(
       slivers: [
