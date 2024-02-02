@@ -41,23 +41,49 @@ class _HomeViewState extends ConsumerState<_HomeView> {
   Widget build(BuildContext context) {
     final moviesSlideshow = ref.watch(moviesSlideshowProvider);
 
-    if(moviesSlideshow.isEmpty) {
+    if (moviesSlideshow.isEmpty) {
       return const CircularProgressIndicator();
     }
 
-    return Column(
-      children: [
-        const CustomAppbar(),
+    return CustomScrollView(
+      slivers: [
+        const SliverAppBar(
+          floating: true,
+          flexibleSpace: FlexibleSpaceBar(
+            titlePadding: EdgeInsets.all(0),
+            title: CustomAppbar(),
+          ),
+        ),
 
-        MoviesSlideshow(movies: moviesSlideshow.sublist(0, 6)),
-        
-        MoviesHorizontalListview(
-          title: 'Cinema',
-          subtitle: 'Monday 26',
-          loadNextPage: () => ref.read(nowPlayingMoviesProvider.notifier).loadNextPage(),
-          movies: moviesSlideshow
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              return Column(
+                children: [                  
+                  MoviesSlideshow(movies: moviesSlideshow.sublist(0, 6)),
+
+                  MoviesHorizontalListview(
+                    title: 'Cinema',
+                    subtitle: 'Monday 26',
+                    loadNextPage: () => ref.read(nowPlayingMoviesProvider.notifier).loadNextPage(),
+                    movies: moviesSlideshow
+                  ),
+
+                  MoviesHorizontalListview(
+                    title: 'Cinema',
+                    subtitle: 'Monday 26',
+                    loadNextPage: () => ref.read(nowPlayingMoviesProvider.notifier).loadNextPage(),
+                    movies: moviesSlideshow
+                  ),
+                  
+                  const SizedBox(height: 10)
+                ],
+              );
+            }, 
+            childCount: 1
+          ),
         )
-      ],
+      ]
     );
   }
 }
