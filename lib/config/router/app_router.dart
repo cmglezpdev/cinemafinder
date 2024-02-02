@@ -3,6 +3,7 @@
 import 'package:cinemafinder/presentation/screens/screens.dart';
 import 'package:go_router/go_router.dart';
 
+// TODO: add transition between pages
 final appRouter = GoRouter(
   routes: [
     GoRoute(
