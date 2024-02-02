@@ -28,7 +28,7 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
 
     _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
       if(query.isEmpty) {
-        debouncedMovies.add([]);
+        debouncedMovies.add(List<Movie>.empty());
         return;
       }
     
