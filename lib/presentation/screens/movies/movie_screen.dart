@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:cinemafinder/domain/entities/movie.dart';
+import 'package:cinemafinder/config/helpers/human_formants.dart';
+import 'package:cinemafinder/domain/entities/movie_details.dart';
 import 'package:cinemafinder/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,17 +24,19 @@ class _MovieScreenState extends ConsumerState<MovieScreen> {
   void initState() {
     super.initState();
 
-    ref.read(movieInfoProvider.notifier).loadMovie(widget.movieId);
+    ref.read(movieDetailsProvider.notifier).loadMovie(widget.movieId);
     ref.read(actorsByMovieProvider.notifier).loadActors(widget.movieId);
   }
 
   @override
   Widget build(BuildContext context) {
-    final Movie? movie = ref.watch(movieInfoProvider)[widget.movieId];
+    final MovieDetails? movie = ref.watch(movieDetailsProvider)[widget.movieId];
 
     if(movie == null) {
       return const Scaffold(
-        body: CircularProgressIndicator(strokeWidth: 2),
+        body: Center(
+          child: CircularProgressIndicator(strokeWidth: 2)
+        ),
       );
     }
 
@@ -57,7 +60,7 @@ class _MovieScreenState extends ConsumerState<MovieScreen> {
 
 
 class _MovieDetails extends StatelessWidget {
-  final Movie movie;
+  final MovieDetails movie;
   
   const _MovieDetails({
     required this.movie
@@ -71,6 +74,8 @@ class _MovieDetails extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
+        
+        // Principal Info
         Padding(
           padding: const EdgeInsets.all(8),
           child: Row(
@@ -92,6 +97,7 @@ class _MovieDetails extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(movie.title, style: textStyles.titleLarge),
+                    // Text(movie.tagline, style: textStyles.titleSmall),
                     Text(movie.overview)
                   ],
                 ),
@@ -100,14 +106,69 @@ class _MovieDetails extends StatelessWidget {
           ),
         ),
 
+        // Details
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Column(
+                children: [
+                  ShowDetail(
+                    title: 'Status', 
+                    data: movie.status
+                  ),
+                  const SizedBox(height: 10),
+                  ShowDetail(
+                    title: 'Release Date', 
+                    data: movie.releaseDate != null
+                      ? HumanFormants.date(movie.releaseDate!)
+                      : '-'
+                  ),
+                ],
+              ),
+          
+              const SizedBox(width: 20),
+          
+              Column(
+                children: [
+                  ShowDetail(
+                    title: 'Duration', 
+                    data: HumanFormants.time(movie.runtime)
+                  ),
+                  const SizedBox(height: 10),
+                  ShowDetail(
+                    title: 'Languages', 
+                    data: movie.spokenLanguages.join(', ')
+                  ),
+                ],
+              ),
+          
+              const SizedBox(width: 20),
+          
+              Column(
+                children: [
+                  ShowDetail(
+                    title: 'Budget', 
+                    data: '\$${HumanFormants.number(movie.budget.toDouble())}'
+                  ),
+                  const SizedBox(height: 10),
+                  ShowDetail(
+                    title: 'Revenue', 
+                    data: '\$${HumanFormants.number(movie.revenue.toDouble())}'
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
 
         // Genres
-        // TODO: Convert to buttoms to show more movies
         Padding(
           padding: const EdgeInsets.all(8),
           child: Wrap(
             children: [
-              ...movie.genreIds.map((genre) => Container(
+              ...movie.genres.map((genre) => Container(
                 margin: const EdgeInsets.only(right: 10),
                 child: Chip(
                   label: Text(genre),
@@ -120,6 +181,7 @@ class _MovieDetails extends StatelessWidget {
           ),
         ),
 
+
         // Actors
         _ActorsByMovie(movieId: movie.id.toString()),
 
@@ -128,6 +190,31 @@ class _MovieDetails extends StatelessWidget {
     );
   }
 }
+
+
+class ShowDetail extends StatelessWidget {
+  final String title;
+  final String data;
+
+  const ShowDetail({
+    super.key, 
+    required this.title, 
+    required this.data
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final textStyles = Theme.of(context).textTheme;
+    
+    return Column(
+      children: [
+        Text(title, style: textStyles.titleMedium),
+        Text(data)
+      ],
+    );
+  }
+}
+
 
 
 class _ActorsByMovie extends ConsumerWidget {
@@ -194,7 +281,7 @@ class _ActorsByMovie extends ConsumerWidget {
 
 
 class _CustomSliverAppBar extends StatelessWidget {
-  final Movie movie;
+  final MovieDetails movie;
   const _CustomSliverAppBar({
     required this.movie
   });

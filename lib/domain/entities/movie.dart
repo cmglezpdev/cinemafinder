@@ -1,10 +1,9 @@
 
 
 class Movie {
+  final int id; 
   final bool adult;
   final String backdropPath;
-  final List<String> genreIds;
-  final int id;
   final String originalLanguage;
   final String originalTitle;
   final String overview;
@@ -19,7 +18,6 @@ class Movie {
   Movie({
     required this.adult,
     required this.backdropPath,
-    required this.genreIds,
     required this.id,
     required this.originalLanguage,
     required this.originalTitle,

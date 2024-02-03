@@ -7,7 +7,7 @@ environment:
   sdk: '>=3.2.2 <4.0.0'
 
 dependencies:
-  animate_do: ^3.3.2
+  animate_do: ^3.3.3
   card_swiper: ^3.0.1
   dio: ^5.4.0
   flutter:

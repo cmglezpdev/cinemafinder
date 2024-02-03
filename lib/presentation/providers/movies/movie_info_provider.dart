@@ -1,20 +1,20 @@
-import 'package:cinemafinder/domain/entities/movie.dart';
+import 'package:cinemafinder/domain/entities/movie_details.dart';
 import 'package:cinemafinder/presentation/providers/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
-final movieInfoProvider = StateNotifierProvider<MovieMapNotifier, Map<String, Movie>>((ref) {
+final movieDetailsProvider = StateNotifierProvider<MovieMapNotifier, Map<String, MovieDetails>>((ref) {
   final movieRepository = ref.watch(moviesRepositoryProvider);
   return MovieMapNotifier(
-    getMovie: movieRepository.getMovieById
+    getMovie: movieRepository.getMovieDetails
   );
 });
 
 
 
-typedef GetMovieCallback = Future<Movie> Function(String movieId);
+typedef GetMovieCallback = Future<MovieDetails> Function(String movieId);
 
-class MovieMapNotifier extends StateNotifier<Map<String, Movie>> {
+class MovieMapNotifier extends StateNotifier<Map<String, MovieDetails>> {
   final GetMovieCallback getMovie;
   
   MovieMapNotifier({

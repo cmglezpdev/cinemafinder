@@ -1,8 +1,10 @@
 
+import 'package:cinemafinder/domain/entities/movie.dart';
 import 'package:cinemafinder/presentation/delegates/searh_movie_delegate.dart';
 import 'package:cinemafinder/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class CustomAppbar extends ConsumerWidget {
   const CustomAppbar({super.key});
@@ -28,19 +30,20 @@ class CustomAppbar extends ConsumerWidget {
 
               IconButton(
                 onPressed: () {
-                  final searchMovie = ref.read(searchedMoviesProvider.notifier);
+                  final searchMovie = ref.read(searchedMoviesProvider);
                   final searchQuery = ref.read(searchQueryProvider);
 
-                  showSearch(
+                  showSearch<Movie?>(
                     query: searchQuery,
                     context: context, 
                     delegate: SearchMovieDelegate(
-                      searchMovieCallback: (query) {
-                        ref.read(searchQueryProvider.notifier).update((state) => query);
-                        return searchMovie.searchMoviesByQuery(query);
-                      }
+                      initialMovies: searchMovie,
+                      searchMovieCallback: ref.read(searchedMoviesProvider.notifier).searchMoviesByQuery,
                     )
-                  );
+                  ).then((movie) {
+                    if(movie == null) return;
+                    context.push('/movie/${movie.id}');
+                  });
                 },
                 icon: const Icon(Icons.search_outlined),
               )

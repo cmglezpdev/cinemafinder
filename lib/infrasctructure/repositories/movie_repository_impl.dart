@@ -1,8 +1,6 @@
-
-
-
 import 'package:cinemafinder/domain/datasources/movies_datasource.dart';
 import 'package:cinemafinder/domain/entities/movie.dart';
+import 'package:cinemafinder/domain/entities/movie_details.dart';
 import 'package:cinemafinder/domain/repositories/movie_repository.dart';
 
 class MoviesRepositoryImpl extends MoviesRepository {
@@ -31,8 +29,8 @@ class MoviesRepositoryImpl extends MoviesRepository {
   }
   
   @override
-  Future<Movie> getMovieById(String id) {
-    return datasource.getMovieById(id);
+  Future<MovieDetails> getMovieDetails(String id) {
+    return datasource.getMovieDetails(id);
   }
   
   @override
