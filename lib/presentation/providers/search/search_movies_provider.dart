@@ -3,7 +3,6 @@ import 'package:cinemafinder/presentation/providers/movies/movies_repository_pro
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
-
 final searchQueryProvider = StateProvider<String>((ref) => '');
 
 
@@ -12,6 +11,7 @@ final searchedMoviesProvider = StateNotifierProvider<SearchedMoviesNotifier, Lis
   
   return SearchedMoviesNotifier(
     searchMovieCallback: movieRepository.searchMovies,
+    ref: ref
   );
 });
 
@@ -20,20 +20,18 @@ final searchedMoviesProvider = StateNotifierProvider<SearchedMoviesNotifier, Lis
 typedef SearchMovieCallback = Future<List<Movie>> Function(String query);
 
 class SearchedMoviesNotifier extends StateNotifier<List<Movie>> {
-  final Map<String, List<Movie>> _searchedMovies = {};
   final SearchMovieCallback searchMovieCallback;
+  final Ref ref;
 
   SearchedMoviesNotifier({
-    required this.searchMovieCallback
+    required this.searchMovieCallback,
+    required this.ref
   }): super([]);
 
   Future<List<Movie>> searchMoviesByQuery(String query) async {
-    if(_searchedMovies.containsKey(query)) {
-      return _searchedMovies[query]!;
-    }
-
     final movies = await searchMovieCallback(query);
-    _searchedMovies[query] = movies;
+    ref.read(searchQueryProvider.notifier).update((state) => query);
+    state = movies;
     return movies;
   }
 }
