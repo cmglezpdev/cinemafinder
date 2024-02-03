@@ -1,5 +1,5 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:cinemafinder/domain/entities/movie.dart';
+import 'package:cinemafinder/domain/entities/movie_details.dart';
 import 'package:cinemafinder/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,13 +23,13 @@ class _MovieScreenState extends ConsumerState<MovieScreen> {
   void initState() {
     super.initState();
 
-    ref.read(movieInfoProvider.notifier).loadMovie(widget.movieId);
+    ref.read(movieDetailsProvider.notifier).loadMovie(widget.movieId);
     ref.read(actorsByMovieProvider.notifier).loadActors(widget.movieId);
   }
 
   @override
   Widget build(BuildContext context) {
-    final Movie? movie = ref.watch(movieInfoProvider)[widget.movieId];
+    final MovieDetails? movie = ref.watch(movieDetailsProvider)[widget.movieId];
 
     if(movie == null) {
       return const Scaffold(
@@ -57,7 +57,7 @@ class _MovieScreenState extends ConsumerState<MovieScreen> {
 
 
 class _MovieDetails extends StatelessWidget {
-  final Movie movie;
+  final MovieDetails movie;
   
   const _MovieDetails({
     required this.movie
@@ -103,22 +103,22 @@ class _MovieDetails extends StatelessWidget {
 
         // Genres
         // TODO: Convert to buttoms to show more movies
-        // Padding(
-        //   padding: const EdgeInsets.all(8),
-        //   child: Wrap(
-        //     children: [
-        //       ...movie.genreIds.map((genre) => Container(
-        //         margin: const EdgeInsets.only(right: 10),
-        //         child: Chip(
-        //           label: Text(genre),
-        //           shape: RoundedRectangleBorder(
-        //             borderRadius: BorderRadius.circular(20)
-        //           ),
-        //         ),
-        //       ))
-        //     ],
-        //   ),
-        // ),
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: Wrap(
+            children: [
+              ...movie.genres.map((genre) => Container(
+                margin: const EdgeInsets.only(right: 10),
+                child: Chip(
+                  label: Text(genre),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)
+                  ),
+                ),
+              ))
+            ],
+          ),
+        ),
 
         // Actors
         _ActorsByMovie(movieId: movie.id.toString()),
@@ -194,7 +194,7 @@ class _ActorsByMovie extends ConsumerWidget {
 
 
 class _CustomSliverAppBar extends StatelessWidget {
-  final Movie movie;
+  final MovieDetails movie;
   const _CustomSliverAppBar({
     required this.movie
   });
