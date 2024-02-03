@@ -103,22 +103,22 @@ class _MovieDetails extends StatelessWidget {
 
         // Genres
         // TODO: Convert to buttoms to show more movies
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: Wrap(
-            children: [
-              ...movie.genreIds.map((genre) => Container(
-                margin: const EdgeInsets.only(right: 10),
-                child: Chip(
-                  label: Text(genre),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)
-                  ),
-                ),
-              ))
-            ],
-          ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.all(8),
+        //   child: Wrap(
+        //     children: [
+        //       ...movie.genreIds.map((genre) => Container(
+        //         margin: const EdgeInsets.only(right: 10),
+        //         child: Chip(
+        //           label: Text(genre),
+        //           shape: RoundedRectangleBorder(
+        //             borderRadius: BorderRadius.circular(20)
+        //           ),
+        //         ),
+        //       ))
+        //     ],
+        //   ),
+        // ),
 
         // Actors
         _ActorsByMovie(movieId: movie.id.toString()),
